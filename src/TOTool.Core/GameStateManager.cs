@@ -11,19 +11,23 @@ namespace TOTool.Core
         private GameState _currentState;
         private readonly Timer _updateTimer;
 
+        private readonly IMemoryReader _memoryReader;
+
         public GameState CurrentState => _currentState;
         public bool IsGameRunning => _currentState == GameState.Running || _currentState == GameState.InGame;
 
         public event EventHandler<GameState>? GameStateChanged;
 
-        public GameStateManager()
+        public GameStateManager(IMemoryReader memoryReader)
         {
+            _memoryReader = memoryReader;
             _updateTimer = new Timer(1000);
             _updateTimer.Elapsed += (s, e) => Update();
         }
 
         public void Initialize()
         {
+            _memoryReader.Initialize();
             _updateTimer.Start();
         }
 
@@ -44,7 +48,13 @@ namespace TOTool.Core
                 if (!ProcessUtils.IsProcessRunning("Trickster"))
                     return GameState.NotRunning;
 
-                // 實現其他狀態檢查邏輯
+                if (!_memoryReader.IsInitialized)
+                    return GameState.Loading;
+
+                var playerInfo = _memoryReader.GetPlayerInfo();
+                if (playerInfo != null)
+                    return GameState.InGame;
+
                 return GameState.Running;
             }
             catch

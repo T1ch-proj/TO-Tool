@@ -53,14 +53,16 @@ namespace TOTool.Core.Memory
 
             try
             {
-                // 在這裡設置斷點
                 var playerInfo = new PlayerInfo
                 {
-                    HP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.HP),
-                    MaxHP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.HP + 4),
-                    MP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.MP),
-                    MaxMP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.MP + 4),
-                    // ... 其他屬性讀取 ...
+                    HP = Read<int>(GetPlayerBaseAddress() + GameOffsets.Player.HP),
+                    MaxHP = Read<int>(GetPlayerBaseAddress() + GameOffsets.Player.HP + 4),
+                    MP = Read<int>(GetPlayerBaseAddress() + GameOffsets.Player.MP),
+                    MaxMP = Read<int>(GetPlayerBaseAddress() + GameOffsets.Player.MP + 4),
+                    Level = Read<int>(GetPlayerBaseAddress() + GameOffsets.Player.Level),
+                    Experience = Read<long>(GetPlayerBaseAddress() + GameOffsets.Player.Experience),
+                    PositionX = Read<float>(GetPlayerBaseAddress() + GameOffsets.Player.PositionX),
+                    PositionY = Read<float>(GetPlayerBaseAddress() + GameOffsets.Player.PositionY)
                 };
                 return playerInfo;
             }
@@ -75,28 +77,6 @@ namespace TOTool.Core.Memory
         {
             // 實現獲取玩家基址的邏輯
             return IntPtr.Zero;
-        }
-
-        public T ReadMemory<T>(IntPtr address) where T : struct
-        {
-            if (!IsInitialized)
-                throw new InvalidOperationException("Memory manager not initialized");
-
-            if (_processHandle == IntPtr.Zero)
-                throw new InvalidOperationException("Process handle is invalid");
-
-            int size = Marshal.SizeOf<T>();
-            byte[] buffer = new byte[size];
-            IntPtr bytesRead;
-
-            if (!ReadProcessMemory(_processHandle, address, buffer, size, out bytesRead))
-                throw new Exception($"Failed to read memory at {address}");
-
-            GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            T result = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
-            handle.Free();
-
-            return result;
         }
 
         public bool WriteMemory<T>(IntPtr address, T value) where T : struct

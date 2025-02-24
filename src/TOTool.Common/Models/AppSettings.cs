@@ -8,5 +8,6 @@ namespace TOTool.Common.Models
         public ModifierKeys ToggleModifiers { get; set; } = ModifierKeys.None;
         public bool AutoStart { get; set; } = false;
         public bool StartMinimized { get; set; } = false;
+        public bool AutoConnect { get; set; } = false;
     }
 } 

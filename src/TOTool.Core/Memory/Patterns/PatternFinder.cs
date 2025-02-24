@@ -1,10 +1,15 @@
-public class PatternFinder
-{
-    private readonly IMemoryReader _memoryReader;
+using TOTool.Core.Memory;
 
-    public PatternFinder(IMemoryReader memoryReader)
+namespace TOTool.Core.Memory.Patterns
+{
+    public class PatternFinder
     {
-        _memoryReader = memoryReader;
+        private readonly IMemoryReader _memoryReader;
+
+        public PatternFinder(IMemoryReader memoryReader)
+        {
+            _memoryReader = memoryReader;
+        }
+        // ... 其他方法
     }
-    // ... 其他方法
 } 

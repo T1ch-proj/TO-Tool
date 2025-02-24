@@ -1,15 +1,14 @@
 using System;
 using System.Threading.Tasks;
-using TOTool.Core.Memory;
-using TOTool.Core.Patterns;
+using TOTool.Common.Interfaces;
+using TOTool.Common.Models;
 using Microsoft.Extensions.Logging;
 
 namespace TOTool.UI.ViewModels
 {
     public class PlayerViewModel : ViewModelBase
     {
-        private readonly MemoryManager _memoryManager;
-        private readonly PatternFinder _patternFinder;
+        private readonly IMemoryReader _memoryReader;
         private readonly ILogger<PlayerViewModel> _logger;
 
         private int _hp;
@@ -21,10 +20,9 @@ namespace TOTool.UI.ViewModels
         private float _posX;
         private float _posY;
 
-        public PlayerViewModel(MemoryManager memoryManager, ILogger<PlayerViewModel> logger)
+        public PlayerViewModel(IMemoryReader memoryReader, ILogger<PlayerViewModel> logger)
         {
-            _memoryManager = memoryManager;
-            _patternFinder = new PatternFinder(memoryManager);
+            _memoryReader = memoryReader;
             _logger = logger;
             StartUpdateLoop();
         }
@@ -90,7 +88,7 @@ namespace TOTool.UI.ViewModels
         {
             try
             {
-                var info = _memoryManager.GetPlayerInfo();
+                var info = _memoryReader.GetPlayerInfo();
                 if (info != null)
                 {
                     HP = info.HP;

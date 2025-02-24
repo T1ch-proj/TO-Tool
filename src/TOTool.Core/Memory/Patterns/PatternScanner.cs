@@ -1,16 +1,23 @@
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using TOTool.Core.Utilities;
+using TOTool.Common.Interfaces;
 
 namespace TOTool.Core.Memory.Patterns
 {
-    public class PatternScanner
+    public class PatternScanner : IPatternScanner
     {
         private readonly MemoryManager _memoryManager;
 
         public PatternScanner(MemoryManager memoryManager)
         {
             _memoryManager = memoryManager ?? throw new ArgumentNullException(nameof(memoryManager));
+        }
+
+        public IntPtr FindPattern(string pattern, string mask)
+        {
+            return FindPattern(pattern, mask, "Trickster.exe");
         }
 
         public IntPtr FindPattern(string pattern, string mask, IntPtr startAddress = default)
@@ -39,6 +46,16 @@ namespace TOTool.Core.Memory.Patterns
                 Logger.LogError($"Pattern scanning error for pattern '{pattern}': {ex.Message}", ex);
                 return IntPtr.Zero;
             }
+        }
+
+        public IntPtr FindPlayerBaseAddress()
+        {
+            return FindPattern(SignaturePatterns.Player.BaseAddress, SignaturePatterns.Player.BaseMask);
+        }
+
+        public IntPtr FindInventoryBaseAddress()
+        {
+            return FindPattern(SignaturePatterns.Game.BasePattern, SignaturePatterns.Game.BaseMask);
         }
     }
 } 

@@ -12,5 +12,8 @@ namespace TOTool.Common.Models
         public float PositionX { get; set; }
         public float PositionY { get; set; }
         public int MapID { get; set; }
+        public bool IsAlive => HP > 0;
+        public float HPPercentage => MaxHP == 0 ? 0 : (float)HP / MaxHP * 100;
+        public float MPPercentage => MaxMP == 0 ? 0 : (float)MP / MaxMP * 100;
     }
 } 

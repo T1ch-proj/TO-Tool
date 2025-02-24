@@ -7,7 +7,8 @@ namespace TOTool.Common.Interfaces
     {
         bool Initialize();
         bool IsInitialized { get; }
-        T ReadMemory<T>(IntPtr address) where T : struct;
+        T Read<T>(IntPtr address) where T : struct;
+        byte[] ReadBytes(IntPtr address, int length);
         bool WriteMemory<T>(IntPtr address, T value) where T : struct;
         PlayerInfo GetPlayerInfo();
     }

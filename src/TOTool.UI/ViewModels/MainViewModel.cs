@@ -3,19 +3,23 @@ using TOTool.Core.Memory;
 using TOTool.Core.Utilities;
 using System.Windows.Threading;
 using System.Windows;
+using TOTool.Common.Interfaces;
 
 namespace TOTool.UI.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly MemoryManager _memoryManager;
+        private readonly IMemoryReader _memoryReader;
+        private readonly IGameStateManager _gameStateManager;
         private bool _isGameRunning;
         private string _gameStatus = string.Empty;
         private readonly System.Timers.Timer _checkTimer;
 
-        public MainViewModel()
+        public MainViewModel(IMemoryReader memoryReader, IGameStateManager gameStateManager)
         {
-            _memoryManager = new MemoryManager();
+            _memoryReader = memoryReader;
+            _gameStateManager = gameStateManager;
+            _gameStateManager.GameStateChanged += OnGameStateChanged;
             _checkTimer = new System.Timers.Timer(1000); // 每秒檢查一次
             _checkTimer.Elapsed += (s, e) => CheckGameStatus();
             _checkTimer.Start();
@@ -38,13 +42,13 @@ namespace TOTool.UI.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (ProcessUtils.IsProcessRunning("Trickster"))
+                if (_gameStateManager.IsGameRunning)
                 {
                     if (!IsGameRunning)
                     {
                         IsGameRunning = true;
                         GameStatus = "遊戲執行中";
-                        InitializeMemoryManager();
+                        _gameStateManager.Initialize();
                     }
                 }
                 else
@@ -58,16 +62,20 @@ namespace TOTool.UI.ViewModels
             });
         }
 
-        private void InitializeMemoryManager()
+        private void OnGameStateChanged(object? sender, GameState newState)
         {
-            if (_memoryManager.Initialize())
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                Logger.LogInfo("記憶體管理器初始化成功");
-            }
-            else
-            {
-                Logger.LogError("記憶體管理器初始化失敗");
-            }
+                GameStatus = newState switch
+                {
+                    GameState.NotRunning => "等待遊戲啟動",
+                    GameState.Loading => "遊戲載入中",
+                    GameState.Running => "遊戲執行中",
+                    GameState.InGame => "遊戲進行中",
+                    GameState.Error => "發生錯誤",
+                    _ => "未知狀態"
+                };
+            });
         }
     }
 } 
