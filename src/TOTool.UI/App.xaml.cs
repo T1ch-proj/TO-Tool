@@ -73,11 +73,17 @@ namespace TOTool.UI
                     DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
                 };
                 MainWindow = mainWindow;
-                if (!settings.StartMinimized)
+                if (settings.StartMinimized)
+                {
+                    MainWindow.WindowState = WindowState.Minimized;
+                    Logger.LogInfo("應用程式已最小化啟動");
+                }
+                else
                 {
                     mainWindow.Show();
                 }
                 Logger.LogInfo("主視窗創建完成");
+                Logger.LogInfo("設定載入完成");
 
                 // 檢查管理員權限
                 try
@@ -93,23 +99,6 @@ namespace TOTool.UI
                         MessageBoxButton.OK, MessageBoxImage.Error);
                     Shutdown();
                     return;
-                }
-
-                // 載入設定
-                try
-                {
-                    Logger.LogInfo("正在載入設定...");
-                    var settings = ConfigManager.LoadConfig<Settings.AppSettings>() ?? new Settings.AppSettings();
-                    if (settings.StartMinimized)
-                    {
-                        MainWindow.WindowState = WindowState.Minimized;
-                        Logger.LogInfo("應用程式已最小化啟動");
-                    }
-                    Logger.LogInfo("設定載入完成");
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError($"載入設定時發生錯誤: {ex.Message}");
                 }
             }
             catch (Exception ex)
