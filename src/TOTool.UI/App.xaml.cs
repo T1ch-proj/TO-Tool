@@ -43,6 +43,29 @@ namespace TOTool.UI
                 _gameStateManager.GameStateChanged += OnGameStateChanged;
                 Logger.LogInfo("遊戲狀態管理器配置完成");
 
+                // 嘗試初始連接
+                Logger.LogInfo("正在嘗試初始連接到遊戲...");
+                if (!_gameStateManager.Initialize())
+                {
+                    Logger.LogInfo("初始連接失敗，等待使用者手動連接");
+                    _notifyIcon.ShowBalloonTip(
+                        3000,
+                        "連接狀態",
+                        "等待遊戲啟動...",
+                        Forms.ToolTipIcon.Info
+                    );
+                }
+                else
+                {
+                    Logger.LogInfo("成功連接到遊戲");
+                    _notifyIcon.ShowBalloonTip(
+                        3000,
+                        "連接狀態",
+                        "已成功連接到遊戲",
+                        Forms.ToolTipIcon.Info
+                    );
+                }
+
                 Logger.LogInfo("正在創建主視窗...");
                 var mainWindow = new MainWindow
                 {
@@ -108,6 +131,7 @@ namespace TOTool.UI
             services.AddSingleton<IGameStateManager>(_ => gameStateManager);
             services.AddSingleton<MainViewModel>();
             services.AddTransient<PlayerViewModel>();
+            services.AddTransient<PlayerInfoViewModel>();
         }
 
         private void InitializeNotifyIcon()
