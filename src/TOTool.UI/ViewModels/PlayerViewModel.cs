@@ -76,13 +76,14 @@ namespace TOTool.UI.ViewModels
             set => SetProperty(ref _posY, value);
         }
 
-        private async void StartUpdateLoop()
+        private void StartUpdateLoop()
         {
-            while (true)
+            var timer = new System.Timers.Timer(100); // 更新頻率 100ms
+            timer.Elapsed += async (s, e) =>
             {
                 await UpdatePlayerInfo();
-                await Task.Delay(100); // 更新頻率 100ms
-            }
+            };
+            timer.Start();
         }
 
         private async Task UpdatePlayerInfo()
