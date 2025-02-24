@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using TOTool.Common.Interfaces;
 using TOTool.Common.Models;
 using Microsoft.Extensions.Logging;
+using TOTool.Core.Memory;
 
 namespace TOTool.UI.ViewModels
 {
     public class PlayerViewModel : ViewModelBase
     {
-        private readonly IMemoryReader _memoryReader;
+        private readonly MemoryManager _memoryReader;
         private readonly ILogger<PlayerViewModel> _logger;
 
         private int _hp;
@@ -20,7 +21,7 @@ namespace TOTool.UI.ViewModels
         private float _posX;
         private float _posY;
 
-        public PlayerViewModel(IMemoryReader memoryReader, ILogger<PlayerViewModel> logger)
+        public PlayerViewModel(MemoryManager memoryReader, ILogger<PlayerViewModel> logger)
         {
             _memoryReader = memoryReader;
             _logger = logger;

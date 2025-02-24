@@ -6,11 +6,18 @@ using TOTool.Common.Interfaces;
 
 public class GameStateManagerTests
 {
+    private readonly Mock<MemoryManager> _memoryManagerMock;
+
+    public GameStateManagerTests()
+    {
+        _memoryManagerMock = new Mock<MemoryManager>();
+    }
+
     [Fact]
     public void Initialize_StartsUpdateTimer()
     {
         // Arrange
-        var manager = new GameStateManager();
+        var manager = new GameStateManager(_memoryManagerMock.Object);
 
         // Act
         manager.Initialize();
@@ -24,7 +31,7 @@ public class GameStateManagerTests
     public void Update_WhenGameStarts_RaisesEvent()
     {
         // Arrange
-        var manager = new GameStateManager();
+        var manager = new GameStateManager(_memoryManagerMock.Object);
         GameState? raisedState = null;
         manager.GameStateChanged += (s, e) => raisedState = e;
 

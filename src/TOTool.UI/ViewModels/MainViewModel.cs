@@ -1,10 +1,10 @@
 using System.Windows.Input;
-using TOTool.Common.Interfaces;
 using TOTool.Common.Models;
 using TOTool.Core.Utilities;
 using System.Windows.Threading;
 using System.Windows;
 using TOTool.Common.Interfaces;
+using TOTool.Core.Memory;
 
 namespace TOTool.UI.ViewModels
 {
