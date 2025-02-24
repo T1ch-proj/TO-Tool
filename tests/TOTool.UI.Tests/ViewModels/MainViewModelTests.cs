@@ -1,9 +1,9 @@
 using System;
 using Xunit;
 using Moq;
-using TOTool.UI.ViewModels;
-using TOTool.Core.Memory;
+using TOTool.Common.Models;
 using TOTool.Common.Interfaces;
+using TOTool.UI.ViewModels;
 
 namespace TOTool.UI.Tests.ViewModels
 {
@@ -22,7 +22,7 @@ namespace TOTool.UI.Tests.ViewModels
         public void Constructor_InitializesCorrectly()
         {
             // Arrange & Act
-            var viewModel = new MainViewModel();
+            var viewModel = new MainViewModel(_memoryReaderMock.Object, _gameStateManagerMock.Object);
 
             // Assert
             Assert.NotNull(viewModel);
@@ -35,12 +35,11 @@ namespace TOTool.UI.Tests.ViewModels
         {
             // Arrange
             _gameStateManagerMock.Setup(x => x.IsGameRunning).Returns(true);
-            var viewModel = new MainViewModel();
+            var viewModel = new MainViewModel(_memoryReaderMock.Object, _gameStateManagerMock.Object);
 
             // Act
             // Trigger game status check
-            _gameStateManagerMock.Raise(x => x.GameStateChanged += null, 
-                new GameStateEventArgs(GameState.Running));
+            _gameStateManagerMock.Raise(x => x.GameStateChanged += null, this, GameState.Running);
 
             // Assert
             Assert.True(viewModel.IsGameRunning);

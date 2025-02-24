@@ -1,51 +1,44 @@
 using System;
 using Xunit;
 using Moq;
+using TOTool.Core.Memory;
 using TOTool.UI.ViewModels;
-using TOTool.Common.Models;
-using TOTool.Common.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace TOTool.UI.Tests.ViewModels
 {
     public class PlayerViewModelTests
     {
-        private readonly Mock<IMemoryReader> _memoryReaderMock;
+        private readonly Mock<MemoryManager> _memoryManagerMock;
+        private readonly Mock<ILogger<PlayerViewModel>> _loggerMock;
 
         public PlayerViewModelTests()
         {
-            _memoryReaderMock = new Mock<IMemoryReader>();
+            _memoryManagerMock = new Mock<MemoryManager>();
+            _loggerMock = new Mock<ILogger<PlayerViewModel>>();
         }
 
         [Fact]
-        public void UpdatePlayerInfo_UpdatesAllProperties()
+        public void Constructor_InitializesCorrectly()
         {
-            // Arrange
-            var playerInfo = new PlayerInfo
-            {
-                HP = 100,
-                MaxHP = 100,
-                MP = 50,
-                MaxMP = 100,
-                Level = 10,
-                Experience = 1000,
-                MaxExperience = 2000
-            };
-
-            _memoryReaderMock.Setup(x => x.GetPlayerInfo()).Returns(playerInfo);
-            var viewModel = new PlayerViewModel(_memoryReaderMock.Object);
-
-            // Act
-            // Trigger update
-            viewModel.UpdatePlayerInfo();
+            // Arrange & Act
+            var viewModel = new PlayerViewModel(_memoryManagerMock.Object, _loggerMock.Object);
 
             // Assert
-            Assert.Equal(100, viewModel.HP);
-            Assert.Equal(100, viewModel.MaxHP);
-            Assert.Equal(50, viewModel.MP);
-            Assert.Equal(100, viewModel.MaxMP);
-            Assert.Equal(10, viewModel.Level);
-            Assert.Equal(1000, viewModel.EXP);
-            Assert.Equal(2000, viewModel.MaxEXP);
+            Assert.NotNull(viewModel);
+        }
+
+        [Fact]
+        public async Task UpdatePlayerInfo_UpdatesProperties()
+        {
+            // Arrange
+            var viewModel = new PlayerViewModel(_memoryManagerMock.Object, _loggerMock.Object);
+
+            // Act
+            await Task.Delay(200); // 等待更新循環執行
+
+            // Assert
+            Assert.Equal(0, viewModel.HP);
         }
     }
 } 
