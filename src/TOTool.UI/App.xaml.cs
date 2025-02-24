@@ -49,7 +49,10 @@ namespace TOTool.UI
                     DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
                 };
                 MainWindow = mainWindow;
-                mainWindow.Show();
+                if (!settings.StartMinimized)
+                {
+                    mainWindow.Show();
+                }
                 Logger.LogInfo("主視窗創建完成");
 
                 // 檢查管理員權限
