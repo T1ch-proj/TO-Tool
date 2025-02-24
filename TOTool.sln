@@ -15,4 +15,42 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TOTool.Core.Tests", "tests\TOTool.Core.Tests\TOTool.Core.Tests.csproj", "{4567890D-BCDE-F012-4567-89ABCDEF0123}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TOTool.UI.Tests", "tests\TOTool.UI.Tests\TOTool.UI.Tests.csproj", "{5678901E-CDEF-0123-5678-9ABCDEF01234}"
-EndProject 
+EndProject
+Global
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {1234567A-89BC-DEF0-1234-56789ABCDEF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {1234567A-89BC-DEF0-1234-56789ABCDEF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {1234567A-89BC-DEF0-1234-56789ABCDEF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {1234567A-89BC-DEF0-1234-56789ABCDEF0}.Release|Any CPU.Build.0 = Release|Any CPU
+        {2345678B-9ABC-DEF0-2345-6789ABCDEF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {2345678B-9ABC-DEF0-2345-6789ABCDEF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {2345678B-9ABC-DEF0-2345-6789ABCDEF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {2345678B-9ABC-DEF0-2345-6789ABCDEF01}.Release|Any CPU.Build.0 = Release|Any CPU
+        {3456789C-ABCD-DEF0-3456-789ABCDEF012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {3456789C-ABCD-DEF0-3456-789ABCDEF012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {3456789C-ABCD-DEF0-3456-789ABCDEF012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {3456789C-ABCD-DEF0-3456-789ABCDEF012}.Release|Any CPU.Build.0 = Release|Any CPU
+        {4567890D-BCDE-F012-4567-89ABCDEF0123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {4567890D-BCDE-F012-4567-89ABCDEF0123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {4567890D-BCDE-F012-4567-89ABCDEF0123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {4567890D-BCDE-F012-4567-89ABCDEF0123}.Release|Any CPU.Build.0 = Release|Any CPU
+        {5678901E-CDEF-0123-5678-9ABCDEF01234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {5678901E-CDEF-0123-5678-9ABCDEF01234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {5678901E-CDEF-0123-5678-9ABCDEF01234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {5678901E-CDEF-0123-5678-9ABCDEF01234}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(SolutionProperties) = preSolution
+        HideSolutionNode = FALSE
+    EndGlobalSection
+    GlobalSection(NestedProjects) = preSolution
+        {1234567A-89BC-DEF0-1234-56789ABCDEF0} = {5EA7E373-1A0D-4A0B-9E49-5A4F7A5EA3F5}
+        {2345678B-9ABC-DEF0-2345-6789ABCDEF01} = {5EA7E373-1A0D-4A0B-9E49-5A4F7A5EA3F5}
+        {3456789C-ABCD-DEF0-3456-789ABCDEF012} = {5EA7E373-1A0D-4A0B-9E49-5A4F7A5EA3F5}
+        {4567890D-BCDE-F012-4567-89ABCDEF0123} = {6EA7E373-1A0D-4A0B-9E49-5A4F7A5EA3F6}
+        {5678901E-CDEF-0123-5678-9ABCDEF01234} = {6EA7E373-1A0D-4A0B-9E49-5A4F7A5EA3F6}
+    EndGlobalSection
+EndGlobal 
