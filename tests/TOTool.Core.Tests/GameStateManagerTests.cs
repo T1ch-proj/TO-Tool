@@ -3,6 +3,7 @@ using Moq;
 using TOTool.Core;
 using TOTool.Common.Models;
 using TOTool.Common.Interfaces;
+using TOTool.Core.Memory;
 
 public class GameStateManagerTests
 {

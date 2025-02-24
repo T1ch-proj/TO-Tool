@@ -6,6 +6,7 @@ using TOTool.Core.Memory;
 using Microsoft.Extensions.Logging;
 using TOTool.UI.ViewModels;
 using TOTool.Common.Settings;
+using TOTool.Core;
 
 namespace TOTool.UI
 {
@@ -47,8 +48,11 @@ namespace TOTool.UI
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IMemoryReader, MemoryManager>();
-            services.AddSingleton<IGameStateManager, GameStateManager>();
+            var memoryManager = new MemoryManager();
+            var gameStateManager = new GameStateManager(memoryManager);
+
+            services.AddSingleton(memoryManager);
+            services.AddSingleton<IGameStateManager>(gameStateManager);
             services.AddSingleton<MainViewModel>();
             services.AddTransient<PlayerViewModel>();
         }
