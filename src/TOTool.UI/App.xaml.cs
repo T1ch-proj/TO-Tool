@@ -111,15 +111,15 @@ namespace TOTool.UI
         {
             _notifyIcon = new Forms.NotifyIcon
             {
-                Icon = SystemIcons.Application, // 暫時使用系統圖標，之後可替換
+                Icon = SystemIcons.Application,
                 Visible = true,
                 Text = "TOTool"
             };
 
             // 創建右鍵選單
             var contextMenu = new Forms.ContextMenuStrip();
-            contextMenu.Items.Add("Hook Status: 未連接", null, null);
-            contextMenu.Items.Add("-"); // 分隔線
+            contextMenu.Items.Add("Hook Status: 未連接", null, TryReconnect);
+            contextMenu.Items.Add("-");
             contextMenu.Items.Add("顯示主視窗", null, ShowMainWindow);
             contextMenu.Items.Add("退出", null, Exit);
 
@@ -171,6 +171,36 @@ namespace TOTool.UI
             catch (Exception ex)
             {
                 Logger.LogError($"更新遊戲狀態時發生錯誤: {ex.Message}");
+            }
+        }
+
+        private void TryReconnect(object? sender, EventArgs e)
+        {
+            try
+            {
+                Logger.LogInfo("嘗試重新連接到遊戲...");
+                var gameStateManager = _serviceProvider.GetRequiredService<IGameStateManager>();
+                
+                if (!gameStateManager.Initialize())
+                {
+                    Logger.LogError("無法連接到遊戲");
+                    _notifyIcon.ShowBalloonTip(
+                        3000,
+                        "連接失敗",
+                        "找不到 Trickster Online 程序，請確保遊戲已啟動。",
+                        Forms.ToolTipIcon.Warning
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"重新連接時發生錯誤: {ex.Message}");
+                _notifyIcon.ShowBalloonTip(
+                    3000,
+                    "錯誤",
+                    "連接遊戲時發生錯誤，請檢查日誌獲取詳細信息。",
+                    Forms.ToolTipIcon.Error
+                );
             }
         }
 

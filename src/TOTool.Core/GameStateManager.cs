@@ -26,10 +26,28 @@ namespace TOTool.Core
             _updateTimer.Elapsed += (s, e) => Update();
         }
 
-        public void Initialize()
+        public bool Initialize()
         {
-            _memoryReader.Initialize();
-            _updateTimer.Start();
+            Logger.LogInfo("正在初始化遊戲狀態管理器...");
+            try
+            {
+                if (!_memoryReader.Initialize())
+                {
+                    Logger.LogError("初始化失敗：找不到遊戲進程");
+                    OnGameStateChanged(GameState.NotRunning);
+                    return false;
+                }
+
+                Logger.LogInfo("成功連接到遊戲進程");
+                OnGameStateChanged(GameState.Running);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"初始化時發生錯誤: {ex.Message}");
+                OnGameStateChanged(GameState.Error);
+                return false;
+            }
         }
 
         public void Update()
@@ -62,6 +80,11 @@ namespace TOTool.Core
             {
                 return GameState.Error;
             }
+        }
+
+        private void OnGameStateChanged(GameState newState)
+        {
+            GameStateChanged?.Invoke(this, newState);
         }
     }
 } 

@@ -8,6 +8,7 @@
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UseWindowsForms>true</UseWindowsForms>
+    <DisableWinExeOutputInference>false</DisableWinExeOutputInference>
   </PropertyGroup>
 
   <ItemGroup>
