@@ -20,8 +20,8 @@ namespace TOTool.UI.ViewModels
 
         public MainViewModel(IMemoryReader memoryReader, IGameStateManager gameStateManager)
         {
-            _memoryReader = memoryReader;
-            _gameStateManager = gameStateManager;
+            _memoryReader = memoryReader ?? throw new ArgumentNullException(nameof(memoryReader));
+            _gameStateManager = gameStateManager ?? throw new ArgumentNullException(nameof(gameStateManager));
             _gameStateManager.GameStateChanged += OnGameStateChanged;
             _checkTimer = new System.Timers.Timer(1000); // 每秒檢查一次
             _checkTimer.Elapsed += (s, e) => CheckGameStatus();

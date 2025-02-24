@@ -101,6 +101,7 @@ namespace TOTool.UI
             var gameStateManager = new GameStateManager(memoryManager);
 
             services.AddSingleton(memoryManager);
+            services.AddSingleton<IMemoryReader>(memoryManager);
             services.AddSingleton<IGameStateManager>(_ => gameStateManager);
             services.AddSingleton<MainViewModel>();
             services.AddTransient<PlayerViewModel>();
