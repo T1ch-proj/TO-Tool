@@ -1,5 +1,6 @@
 using System.Windows.Input;
-using TOTool.Core.Memory;
+using TOTool.Common.Interfaces;
+using TOTool.Common.Models;
 using TOTool.Core.Utilities;
 using System.Windows.Threading;
 using System.Windows;

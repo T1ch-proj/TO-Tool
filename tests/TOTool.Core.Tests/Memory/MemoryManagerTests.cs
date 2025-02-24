@@ -44,7 +44,7 @@ namespace TOTool.Core.Tests.Memory
             var address = new IntPtr(0x123456);
 
             // Act
-            var result = memoryManager.ReadMemory<int>(address);
+            var result = memoryManager.Read<int>(address);
 
             // Assert
             Assert.Equal(testValue, result);

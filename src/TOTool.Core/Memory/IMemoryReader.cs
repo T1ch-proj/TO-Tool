@@ -1,6 +1,6 @@
 using System;
 
-namespace TOTool.Core.Memory
+namespace TOTool.Common.Interfaces
 {
     public interface IMemoryReader
     {

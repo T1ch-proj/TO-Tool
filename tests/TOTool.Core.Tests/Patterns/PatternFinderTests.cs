@@ -8,11 +8,11 @@ namespace TOTool.Core.Tests.Patterns
 {
     public class PatternFinderTests
     {
-        private readonly Mock<IMemoryReader> _memoryReaderMock;
+        private readonly Mock<MemoryManager> _memoryManagerMock;
 
         public PatternFinderTests()
         {
-            _memoryReaderMock = new Mock<IMemoryReader>();
+            _memoryManagerMock = new Mock<MemoryManager>();
         }
 
         [Fact]
@@ -23,8 +23,8 @@ namespace TOTool.Core.Tests.Patterns
             var mask = "xxx????";
             var expectedAddress = new IntPtr(0x12345678);
 
-            _memoryReaderMock.Setup(x => x.IsInitialized).Returns(true);
-            var patternFinder = new PatternFinder(_memoryReaderMock.Object);
+            _memoryManagerMock.Setup(x => x.IsInitialized).Returns(true);
+            var patternFinder = new PatternFinder(_memoryManagerMock.Object);
 
             // Act
             var result = patternFinder.FindPattern(pattern, mask);
@@ -39,8 +39,8 @@ namespace TOTool.Core.Tests.Patterns
             // Arrange
             var pattern = "invalid pattern";
             var mask = "xxx";
-            _memoryReaderMock.Setup(x => x.IsInitialized).Returns(true);
-            var patternFinder = new PatternFinder(_memoryReaderMock.Object);
+            _memoryManagerMock.Setup(x => x.IsInitialized).Returns(true);
+            var patternFinder = new PatternFinder(_memoryManagerMock.Object);
 
             // Act
             var result = patternFinder.FindPattern(pattern, mask);
