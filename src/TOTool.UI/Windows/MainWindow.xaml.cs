@@ -1,6 +1,8 @@
+using System;
 using System.Windows;
 using System.Windows.Input;
 using TOTool.Core.Utilities;
+using Forms = System.Windows.Forms;
 
 namespace TOTool.UI.Windows
 {
@@ -21,9 +23,9 @@ namespace TOTool.UI.Windows
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("請以管理員權限執行此程式！", "權限錯誤", 
+                System.Windows.MessageBox.Show("請以管理員權限執行此程式！", "權限錯誤", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
             }
 
             // 初始化日誌
@@ -43,7 +45,7 @@ namespace TOTool.UI.Windows
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -57,6 +59,13 @@ namespace TOTool.UI.Windows
         private void RegisterHotKey()
         {
             // TODO: 實現熱鍵註冊邏輯
+        }
+
+        private void ShowError(string message)
+        {
+            System.Windows.MessageBox.Show(message, "錯誤",
+                 MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Windows.Application.Current.Shutdown();
         }
     }
 } 

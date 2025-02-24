@@ -8,7 +8,7 @@ using TOTool.Core.Memory;
 using Microsoft.Extensions.Logging;
 using TOTool.UI.ViewModels;
 using TOTool.UI.Views;
-using TOTool.Common.Settings;
+using Settings = TOTool.Common.Settings;  // 重命名避免衝突
 using TOTool.Core;
 using TOTool.Common.Interfaces;
 using TOTool.Common.Models;  // 添加 GameState 的引用
@@ -58,7 +58,7 @@ namespace TOTool.UI
             Logger.LogInfo("應用程式啟動");
 
             // 載入設定
-            var settings = ConfigManager.LoadConfig<AppSettings>() ?? new AppSettings();
+            var settings = ConfigManager.LoadConfig<Settings.AppSettings>() ?? new Settings.AppSettings();
             if (settings.StartMinimized)
             {
                 MainWindow.WindowState = WindowState.Minimized;
