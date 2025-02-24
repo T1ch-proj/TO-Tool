@@ -3,6 +3,7 @@ using Timer = System.Timers.Timer;
 using TOTool.Common.Interfaces;  // IGameStateManager
 using TOTool.Common.Models;      // GameState
 using TOTool.Core.Utilities;
+using TOTool.Core.Memory;
 
 namespace TOTool.Core
 {
@@ -11,14 +12,14 @@ namespace TOTool.Core
         private GameState _currentState;
         private readonly Timer _updateTimer;
 
-        private readonly IMemoryReader _memoryReader;
+        private readonly MemoryManager _memoryReader;
 
         public GameState CurrentState => _currentState;
         public bool IsGameRunning => _currentState == GameState.Running || _currentState == GameState.InGame;
 
         public event EventHandler<GameState>? GameStateChanged;
 
-        public GameStateManager(IMemoryReader memoryReader)
+        public GameStateManager(MemoryManager memoryReader)
         {
             _memoryReader = memoryReader;
             _updateTimer = new Timer(1000);

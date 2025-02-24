@@ -1,14 +1,18 @@
-using TOTool.Core.Memory;
+using System;
+using System.Linq;
+using System.Runtime.InteropServices;
+using TOTool.Core.Utilities;
+using TOTool.Common.Interfaces;
 
 namespace TOTool.Core.Memory.Patterns
 {
     public class PatternFinder
     {
-        private readonly IMemoryReader _memoryReader;
+        private readonly MemoryManager _memoryManager;
 
-        public PatternFinder(IMemoryReader memoryReader)
+        public PatternFinder(MemoryManager memoryManager)
         {
-            _memoryReader = memoryReader;
+            _memoryManager = memoryManager ?? throw new ArgumentNullException(nameof(memoryManager));
         }
         // ... 其他方法
     }
