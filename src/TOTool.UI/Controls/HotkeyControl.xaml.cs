@@ -10,7 +10,7 @@ namespace TOTool.UI.Controls
     {
         private Key _key;
         private ModifierKeys _modifiers;
-        private string _label;
+        private string _label = string.Empty;
 
         public HotkeyControl()
         {

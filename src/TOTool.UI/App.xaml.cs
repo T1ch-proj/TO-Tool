@@ -2,12 +2,16 @@ using System;
 using System.Windows;
 using TOTool.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
+using TOTool.Core.Memory;
+using TOTool.Core.Game;
+using TOTool.UI.ViewModels;
+using TOTool.Common.Settings;
 
 namespace TOTool.UI
 {
     public partial class App : Application
     {
-        private IServiceProvider _serviceProvider;
+        private IServiceProvider _serviceProvider = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using TOTool.Core.Memory;
 using TOTool.Core.Patterns;
+using Microsoft.Extensions.Logging;
 
 namespace TOTool.UI.ViewModels
 {
@@ -9,6 +10,7 @@ namespace TOTool.UI.ViewModels
     {
         private readonly MemoryManager _memoryManager;
         private readonly PatternFinder _patternFinder;
+        private readonly ILogger<PlayerViewModel> _logger;
 
         private int _hp;
         private int _maxHp;
@@ -19,10 +21,11 @@ namespace TOTool.UI.ViewModels
         private float _posX;
         private float _posY;
 
-        public PlayerViewModel(MemoryManager memoryManager)
+        public PlayerViewModel(MemoryManager memoryManager, ILogger<PlayerViewModel> logger)
         {
             _memoryManager = memoryManager;
             _patternFinder = new PatternFinder(memoryManager);
+            _logger = logger;
             StartUpdateLoop();
         }
 
@@ -94,15 +97,15 @@ namespace TOTool.UI.ViewModels
                     MaxHP = info.MaxHP;
                     MP = info.MP;
                     MaxMP = info.MaxMP;
-                    EXP = info.Experience;
-                    MaxEXP = info.MaxExperience;
+                    EXP = (int)info.Experience;
+                    MaxEXP = (int)info.MaxExperience;
                     PosX = info.PositionX;
                     PosY = info.PositionY;
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError("更新玩家資訊失敗", ex);
+                _logger.LogError(ex, "更新玩家資訊失敗");
             }
         }
     }

@@ -9,7 +9,7 @@ namespace TOTool.UI.ViewModels
     {
         private readonly MemoryManager _memoryManager;
         private bool _isGameRunning;
-        private string _gameStatus;
+        private string _gameStatus = string.Empty;
         private readonly System.Timers.Timer _checkTimer;
 
         public MainViewModel()
