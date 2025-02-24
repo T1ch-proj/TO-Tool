@@ -20,6 +20,26 @@ namespace TOTool.Core.Memory.Patterns
             return FindPattern(pattern, mask, "Trickster.exe");
         }
 
+        public IntPtr FindPattern(string pattern, string mask, string moduleName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(pattern) || string.IsNullOrEmpty(mask))
+                    throw new ArgumentException("Pattern or mask cannot be null or empty");
+
+                var moduleBase = ModuleHandler.GetModuleBaseAddress(_memoryManager._gameProcess.Id, moduleName);
+                if (moduleBase == IntPtr.Zero)
+                    throw new Exception($"Could not find module {moduleName}");
+
+                return FindPattern(pattern, mask, moduleBase);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Pattern scanning error for pattern '{pattern}' in module '{moduleName}': {ex.Message}", ex);
+                return IntPtr.Zero;
+            }
+        }
+
         public IntPtr FindPattern(string pattern, string mask, IntPtr startAddress = default)
         {
             try
