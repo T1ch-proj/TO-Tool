@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace TOTool.UI.Controls
 {
-    public partial class PlayerInfoControl : UserControl, INotifyPropertyChanged
+    public partial class PlayerInfoControl : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         private int _hp;
         private int _maxHp;

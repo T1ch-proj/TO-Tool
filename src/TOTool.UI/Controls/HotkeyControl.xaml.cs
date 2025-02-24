@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace TOTool.UI.Controls
 {
-    public partial class HotkeyControl : UserControl, INotifyPropertyChanged
+    public partial class HotkeyControl : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         private Key _key;
         private ModifierKeys _modifiers;

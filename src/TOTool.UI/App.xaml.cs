@@ -1,6 +1,6 @@
 using System;
 using System.Windows;
-using System.Windows.Forms;
+using Forms = System.Windows.Forms;  // 重命名避免衝突
 using System.Drawing;
 using TOTool.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,13 +11,14 @@ using TOTool.UI.Views;
 using TOTool.Common.Settings;
 using TOTool.Core;
 using TOTool.Common.Interfaces;
+using TOTool.Common.Models;  // 添加 GameState 的引用
 
 namespace TOTool.UI
 {
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private IServiceProvider _serviceProvider = null!;
-        private NotifyIcon _notifyIcon = null!;
+        private Forms.NotifyIcon _notifyIcon = null!;
         private IGameStateManager _gameStateManager = null!;
 
         protected override void OnStartup(StartupEventArgs e)
@@ -77,7 +78,7 @@ namespace TOTool.UI
 
         private void InitializeNotifyIcon()
         {
-            _notifyIcon = new NotifyIcon
+            _notifyIcon = new Forms.NotifyIcon
             {
                 Icon = SystemIcons.Application, // 暫時使用系統圖標，之後可替換
                 Visible = true,
@@ -85,7 +86,7 @@ namespace TOTool.UI
             };
 
             // 創建右鍵選單
-            var contextMenu = new ContextMenuStrip();
+            var contextMenu = new Forms.ContextMenuStrip();
             contextMenu.Items.Add("Hook Status: 未連接", null, null);
             contextMenu.Items.Add("-"); // 分隔線
             contextMenu.Items.Add("顯示主視窗", null, ShowMainWindow);
@@ -95,9 +96,9 @@ namespace TOTool.UI
             _notifyIcon.MouseClick += NotifyIcon_MouseClick;
         }
 
-        private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
+        private void NotifyIcon_MouseClick(object sender, Forms.MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == Forms.MouseButtons.Left)
             {
                 ShowMainWindow(sender, e);
             }
@@ -113,7 +114,7 @@ namespace TOTool.UI
             }
         }
 
-        private void Exit(object sender, EventArgs e)
+        private new void Exit(object sender, EventArgs e)
         {
             Shutdown();
         }
