@@ -15,7 +15,7 @@ namespace TOTool.Core.Tests.Memory
             var memoryManager = new MemoryManager();
 
             // Act
-            bool result = memoryManager.Initialize("notepad");
+            bool result = memoryManager.Initialize();
 
             // Assert
             Assert.True(result);
@@ -28,7 +28,7 @@ namespace TOTool.Core.Tests.Memory
             var memoryManager = new MemoryManager();
 
             // Act
-            bool result = memoryManager.Initialize("NonExistentProcess");
+            bool result = memoryManager.Initialize();
 
             // Assert
             Assert.False(result);
@@ -39,7 +39,7 @@ namespace TOTool.Core.Tests.Memory
         {
             // Arrange
             var memoryManager = new MemoryManager();
-            memoryManager.Initialize("notepad");
+            memoryManager.Initialize();
             var testValue = 12345;
             var address = new IntPtr(0x123456);
 
@@ -68,7 +68,7 @@ namespace TOTool.Core.Tests.Memory
         {
             // Arrange
             var memoryManager = new MemoryManager();
-            memoryManager.Initialize("Trickster");
+            memoryManager.Initialize();
 
             // Act
             var result = memoryManager.GetPlayerInfo();

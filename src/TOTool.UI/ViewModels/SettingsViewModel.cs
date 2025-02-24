@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using TOTool.Core.Utilities;
+using TOTool.Common.Settings;
 
 namespace TOTool.UI.ViewModels
 {
