@@ -6,9 +6,9 @@ namespace TOTool.Common.Interfaces
     public interface IGameStateManager
     {
         GameState CurrentState { get; }
-        event EventHandler<GameState> GameStateChanged;
-        void Initialize();
-        void Update();
         bool IsGameRunning { get; }
+        event EventHandler<GameState>? GameStateChanged;
+        bool Initialize();
+        void Update();
     }
 } 
