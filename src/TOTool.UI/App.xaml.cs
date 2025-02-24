@@ -23,6 +23,14 @@ namespace TOTool.UI
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
 
+            var mainWindow = new MainWindow
+            {
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
+            };
+
+            MainWindow = mainWindow;
+            mainWindow.Show();
+
             // 檢查管理員權限
             try
             {
@@ -40,7 +48,7 @@ namespace TOTool.UI
             Logger.LogInfo("應用程式啟動");
 
             // 載入設定
-            var settings = ConfigManager.LoadConfig<AppSettings>();
+            var settings = ConfigManager.LoadConfig<AppSettings>() ?? new AppSettings();
             if (settings.StartMinimized)
             {
                 MainWindow.WindowState = WindowState.Minimized;

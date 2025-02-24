@@ -79,9 +79,9 @@ namespace TOTool.UI.ViewModels
         private void StartUpdateLoop()
         {
             var timer = new System.Timers.Timer(100); // 更新頻率 100ms
-            timer.Elapsed += async (s, e) =>
+            timer.Elapsed += (s, e) =>
             {
-                await UpdatePlayerInfo();
+                UpdatePlayerInfo().ConfigureAwait(false);
             };
             timer.Start();
         }
