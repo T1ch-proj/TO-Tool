@@ -12,7 +12,7 @@ namespace TOTool.Core.Memory
 {
     public class MemoryManager : IMemoryReader
     {
-        private Process? _gameProcess;
+        protected internal Process? _gameProcess;
         private IntPtr _processHandle = IntPtr.Zero;
         private PatternScanner? _patternScanner;
 
@@ -26,6 +26,8 @@ namespace TOTool.Core.Memory
         private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesWritten);
 
         public bool IsInitialized { get; private set; }
+
+        public int ProcessId => _gameProcess?.Id ?? -1;
 
         public bool Initialize()
         {

@@ -27,7 +27,7 @@ namespace TOTool.Core.Memory.Patterns
                 if (string.IsNullOrEmpty(pattern) || string.IsNullOrEmpty(mask))
                     throw new ArgumentException("Pattern or mask cannot be null or empty");
 
-                var moduleBase = ModuleHandler.GetModuleBaseAddress(_memoryManager._gameProcess.Id, moduleName);
+                var moduleBase = ModuleHandler.GetModuleBaseAddress(_memoryManager.ProcessId, moduleName);
                 if (moduleBase == IntPtr.Zero)
                     throw new Exception($"Could not find module {moduleName}");
 
