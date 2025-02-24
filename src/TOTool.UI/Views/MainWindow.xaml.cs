@@ -7,6 +7,15 @@ namespace TOTool.UI.Views
         public MainWindow()
         {
             InitializeComponent();
+            StateChanged += MainWindow_StateChanged;
+        }
+
+        private void MainWindow_StateChanged(object sender, System.EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+            }
         }
     }
 } 

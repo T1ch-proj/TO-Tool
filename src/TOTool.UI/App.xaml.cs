@@ -1,5 +1,7 @@
 using System;
 using System.Windows;
+using System.Windows.Forms;
+using System.Drawing;
 using TOTool.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using TOTool.Core.Memory;
@@ -15,6 +17,8 @@ namespace TOTool.UI
     public partial class App : Application
     {
         private IServiceProvider _serviceProvider = null!;
+        private NotifyIcon _notifyIcon = null!;
+        private IGameStateManager _gameStateManager = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -23,6 +27,10 @@ namespace TOTool.UI
             var services = new ServiceCollection();
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
+
+            InitializeNotifyIcon();
+            _gameStateManager = _serviceProvider.GetRequiredService<IGameStateManager>();
+            _gameStateManager.GameStateChanged += OnGameStateChanged;
 
             var mainWindow = new MainWindow
             {
@@ -67,8 +75,67 @@ namespace TOTool.UI
             services.AddTransient<PlayerViewModel>();
         }
 
+        private void InitializeNotifyIcon()
+        {
+            _notifyIcon = new NotifyIcon
+            {
+                Icon = SystemIcons.Application, // 暫時使用系統圖標，之後可替換
+                Visible = true,
+                Text = "TOTool"
+            };
+
+            // 創建右鍵選單
+            var contextMenu = new ContextMenuStrip();
+            contextMenu.Items.Add("Hook Status: 未連接", null, null);
+            contextMenu.Items.Add("-"); // 分隔線
+            contextMenu.Items.Add("顯示主視窗", null, ShowMainWindow);
+            contextMenu.Items.Add("退出", null, Exit);
+
+            _notifyIcon.ContextMenuStrip = contextMenu;
+            _notifyIcon.MouseClick += NotifyIcon_MouseClick;
+        }
+
+        private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ShowMainWindow(sender, e);
+            }
+        }
+
+        private void ShowMainWindow(object sender, EventArgs e)
+        {
+            if (MainWindow != null)
+            {
+                MainWindow.Show();
+                MainWindow.WindowState = WindowState.Normal;
+                MainWindow.Activate();
+            }
+        }
+
+        private void Exit(object sender, EventArgs e)
+        {
+            Shutdown();
+        }
+
+        private void OnGameStateChanged(object sender, GameState newState)
+        {
+            if (_notifyIcon?.ContextMenuStrip?.Items.Count > 0)
+            {
+                var statusText = newState switch
+                {
+                    GameState.NotRunning => "Hook Status: 未連接",
+                    GameState.Running => "Hook Status: 已連接",
+                    GameState.Error => "Hook Status: 錯誤",
+                    _ => "Hook Status: 未知"
+                };
+                _notifyIcon.ContextMenuStrip.Items[0].Text = statusText;
+            }
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
+            _notifyIcon?.Dispose();
             Logger.LogInfo("應用程式關閉");
             base.OnExit(e);
         }
