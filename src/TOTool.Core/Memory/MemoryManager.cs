@@ -1,0 +1,63 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Linq;
+
+public class MemoryManager : IMemoryReader
+{
+    private Process _gameProcess;
+    private IntPtr _processHandle;
+    private PatternScanner _patternScanner;
+
+    public bool IsInitialized { get; private set; }
+
+    public bool Initialize(string processName = "Trickster")
+    {
+        try
+        {
+            _gameProcess = Process.GetProcessesByName(processName).FirstOrDefault();
+            if (_gameProcess == null) return false;
+
+            _processHandle = OpenProcess(0x1F0FFF, false, _gameProcess.Id);
+            _patternScanner = new PatternScanner(this);
+            IsInitialized = true;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"初始化失敗: {ex.Message}");
+            return false;
+        }
+    }
+
+    public PlayerInfo GetPlayerInfo()
+    {
+        if (!IsInitialized)
+            return null;
+
+        try
+        {
+            // 在這裡設置斷點
+            var playerInfo = new PlayerInfo
+            {
+                HP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.HP),
+                MaxHP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.HP + 4),
+                MP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.MP),
+                MaxMP = ReadMemory<int>(GetPlayerBaseAddress() + GameOffsets.Player.MP + 4),
+                // ... 其他屬性讀取 ...
+            };
+            return playerInfo;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("讀取玩家資訊失敗", ex);
+            return null;
+        }
+    }
+
+    private IntPtr GetPlayerBaseAddress()
+    {
+        // 實現獲取玩家基址的邏輯
+        return IntPtr.Zero;
+    }
+} 

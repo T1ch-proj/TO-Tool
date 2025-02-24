@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug TOTool",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/TOTool.UI/bin/Debug/net6.0-windows/TOTool.UI.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/TOTool.UI",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Debug Tests",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "dotnet",
+            "args": [
+                "test",
+                "--no-build",
+                "--filter",
+                "FullyQualifiedName~TOTool"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
