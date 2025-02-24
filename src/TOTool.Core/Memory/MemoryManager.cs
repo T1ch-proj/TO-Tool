@@ -135,5 +135,37 @@ namespace TOTool.Core.Memory
         {
             return _gameProcess != null && !_gameProcess.HasExited;
         }
+
+        public byte[] ReadBytes(IntPtr address, int length)
+        {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Memory manager is not initialized");
+
+            var buffer = new byte[length];
+            int bytesRead;
+            
+            if (!ReadProcessMemory(_processHandle, address, buffer, length, out bytesRead) || bytesRead != length)
+            {
+                throw new Exception($"Failed to read memory at address {address}");
+            }
+
+            return buffer;
+        }
+
+        public T Read<T>(IntPtr address) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+            var buffer = ReadBytes(address, size);
+            
+            var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            try
+            {
+                return Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
     }
 } 
