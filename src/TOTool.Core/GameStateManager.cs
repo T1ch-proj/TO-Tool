@@ -14,7 +14,7 @@ namespace TOTool.Core
         public GameState CurrentState => _currentState;
         public bool IsGameRunning => _currentState == GameState.Running || _currentState == GameState.InGame;
 
-        public event EventHandler<GameState> GameStateChanged;
+        public event EventHandler<GameState>? GameStateChanged;
 
         public GameStateManager()
         {

@@ -11,7 +11,7 @@ namespace TOTool.Core.Utilities
             "config.json"
         );
 
-        public static T LoadConfig<T>() where T : new()
+        public static T? LoadConfig<T>() where T : class, new()
         {
             try
             {
@@ -32,17 +32,27 @@ namespace TOTool.Core.Utilities
 
         public static void SaveConfig<T>(T config)
         {
+            if (config == null)
+                throw new ArgumentNullException(nameof(config));
+
             try
             {
+                var directory = Path.GetDirectoryName(ConfigPath);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
                 string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions 
                 { 
                     WriteIndented = true 
                 });
-                File.WriteAllText(ConfigPath, jsonString);
+                File.WriteAllText(ConfigPath, jsonString, System.Text.Encoding.UTF8);
             }
             catch (Exception ex)
             {
                 Logger.LogError("Failed to save config", ex);
+                throw;
             }
         }
     }

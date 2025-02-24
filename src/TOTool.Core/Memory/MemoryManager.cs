@@ -12,9 +12,18 @@ namespace TOTool.Core.Memory
 {
     public class MemoryManager : IMemoryReader
     {
-        private Process _gameProcess;
-        private IntPtr _processHandle;
-        private PatternScanner _patternScanner;
+        private Process? _gameProcess;
+        private IntPtr _processHandle = IntPtr.Zero;
+        private PatternScanner? _patternScanner;
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesWritten);
 
         public bool IsInitialized { get; private set; }
 
@@ -37,9 +46,9 @@ namespace TOTool.Core.Memory
             }
         }
 
-        public PlayerInfo GetPlayerInfo()
+        public PlayerInfo? GetPlayerInfo()
         {
-            if (!IsInitialized)
+            if (!IsInitialized || !IsValidProcess())
                 return null;
 
             try
@@ -73,6 +82,9 @@ namespace TOTool.Core.Memory
             if (!IsInitialized)
                 throw new InvalidOperationException("Memory manager not initialized");
 
+            if (_processHandle == IntPtr.Zero)
+                throw new InvalidOperationException("Process handle is invalid");
+
             int size = Marshal.SizeOf<T>();
             byte[] buffer = new byte[size];
             IntPtr bytesRead;
@@ -92,15 +104,36 @@ namespace TOTool.Core.Memory
             if (!IsInitialized)
                 return false;
 
-            int size = Marshal.SizeOf<T>();
-            byte[] buffer = new byte[size];
-            IntPtr bytesWritten;
+            if (_processHandle == IntPtr.Zero)
+                return false;
 
-            GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), false);
-            handle.Free();
+            try
+            {
+                int size = Marshal.SizeOf<T>();
+                byte[] buffer = new byte[size];
+                IntPtr bytesWritten;
 
-            return WriteProcessMemory(_processHandle, address, buffer, size, out bytesWritten);
+                GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+                try
+                {
+                    Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), false);
+                    return WriteProcessMemory(_processHandle, address, buffer, size, out bytesWritten);
+                }
+                finally
+                {
+                    handle.Free();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Failed to write memory at {address}", ex);
+                return false;
+            }
+        }
+
+        private bool IsValidProcess()
+        {
+            return _gameProcess != null && !_gameProcess.HasExited;
         }
     }
 } 
