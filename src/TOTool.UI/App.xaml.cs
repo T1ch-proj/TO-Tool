@@ -23,45 +23,75 @@ namespace TOTool.UI
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
-
-            InitializeNotifyIcon();
-            _gameStateManager = _serviceProvider.GetRequiredService<IGameStateManager>();
-            _gameStateManager.GameStateChanged += OnGameStateChanged;
-
-            var mainWindow = new MainWindow
-            {
-                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
-            };
-
-            MainWindow = mainWindow;
-            mainWindow.Show();
-
-            // 檢查管理員權限
             try
             {
-                SecurityUtils.EnsureAdminRights();
+                Logger.LogInfo("應用程式開始啟動");
+                base.OnStartup(e);
+
+                Logger.LogInfo("正在配置服務...");
+                var services = new ServiceCollection();
+                ConfigureServices(services);
+                _serviceProvider = services.BuildServiceProvider();
+                Logger.LogInfo("服務配置完成");
+
+                Logger.LogInfo("正在初始化系統托盤圖標...");
+                InitializeNotifyIcon();
+                Logger.LogInfo("系統托盤圖標初始化完成");
+
+                Logger.LogInfo("正在獲取遊戲狀態管理器...");
+                _gameStateManager = _serviceProvider.GetRequiredService<IGameStateManager>();
+                _gameStateManager.GameStateChanged += OnGameStateChanged;
+                Logger.LogInfo("遊戲狀態管理器配置完成");
+
+                Logger.LogInfo("正在創建主視窗...");
+                var mainWindow = new MainWindow
+                {
+                    DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
+                };
+                MainWindow = mainWindow;
+                mainWindow.Show();
+                Logger.LogInfo("主視窗創建完成");
+
+                // 檢查管理員權限
+                try
+                {
+                    Logger.LogInfo("正在檢查管理員權限...");
+                    SecurityUtils.EnsureAdminRights();
+                    Logger.LogInfo("管理員權限檢查通過");
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    Logger.LogError($"權限錯誤: {ex.Message}");
+                    System.Windows.MessageBox.Show("請以管理員權限執行此程式！", "權限錯誤", 
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown();
+                    return;
+                }
+
+                // 載入設定
+                try
+                {
+                    Logger.LogInfo("正在載入設定...");
+                    var settings = ConfigManager.LoadConfig<Settings.AppSettings>() ?? new Settings.AppSettings();
+                    if (settings.StartMinimized)
+                    {
+                        MainWindow.WindowState = WindowState.Minimized;
+                        Logger.LogInfo("應用程式已最小化啟動");
+                    }
+                    Logger.LogInfo("設定載入完成");
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"載入設定時發生錯誤: {ex.Message}");
+                }
             }
-            catch (UnauthorizedAccessException)
+            catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("請以管理員權限執行此程式！", "權限錯誤", 
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.LogError($"應用程式啟動時發生嚴重錯誤: {ex.Message}");
+                Logger.LogError($"錯誤詳情: {ex}");
+                System.Windows.MessageBox.Show($"應用程式啟動失敗！\n\n錯誤訊息：{ex.Message}", 
+                    "嚴重錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown();
-                return;
-            }
-
-            // 初始化日誌
-            Logger.LogInfo("應用程式啟動");
-
-            // 載入設定
-            var settings = ConfigManager.LoadConfig<Settings.AppSettings>() ?? new Settings.AppSettings();
-            if (settings.StartMinimized)
-            {
-                MainWindow.WindowState = WindowState.Minimized;
             }
         }
 
@@ -121,16 +151,25 @@ namespace TOTool.UI
 
         private void OnGameStateChanged(object? sender, GameState newState)
         {
-            if (_notifyIcon?.ContextMenuStrip?.Items.Count > 0)
+            try
             {
-                var statusText = newState switch
+                Logger.LogInfo($"遊戲狀態改變: {newState}");
+                if (_notifyIcon?.ContextMenuStrip?.Items.Count > 0)
                 {
-                    GameState.NotRunning => "Hook Status: 未連接",
-                    GameState.Running => "Hook Status: 已連接",
-                    GameState.Error => "Hook Status: 錯誤",
-                    _ => "Hook Status: 未知"
-                };
-                _notifyIcon.ContextMenuStrip.Items[0].Text = statusText;
+                    var statusText = newState switch
+                    {
+                        GameState.NotRunning => "Hook Status: 未連接",
+                        GameState.Running => "Hook Status: 已連接",
+                        GameState.Error => "Hook Status: 錯誤",
+                        _ => "Hook Status: 未知"
+                    };
+                    _notifyIcon.ContextMenuStrip.Items[0].Text = statusText;
+                    Logger.LogInfo($"托盤圖標狀態更新為: {statusText}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"更新遊戲狀態時發生錯誤: {ex.Message}");
             }
         }
 
