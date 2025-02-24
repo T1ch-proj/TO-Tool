@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TOTool.Core.Memory;
 using Microsoft.Extensions.Logging;
 using TOTool.UI.ViewModels;
+using TOTool.UI.Views;
 using TOTool.Common.Settings;
 using TOTool.Core;
 using TOTool.Common.Interfaces;

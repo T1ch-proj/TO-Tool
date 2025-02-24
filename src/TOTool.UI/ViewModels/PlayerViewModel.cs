@@ -90,18 +90,21 @@ namespace TOTool.UI.ViewModels
         {
             try
             {
-                var info = _memoryReader.GetPlayerInfo();
-                if (info != null)
+                await Task.Run(() =>
                 {
-                    HP = info.HP;
-                    MaxHP = info.MaxHP;
-                    MP = info.MP;
-                    MaxMP = info.MaxMP;
-                    EXP = (int)info.Experience;
-                    MaxEXP = (int)info.MaxExperience;
-                    PosX = info.PositionX;
-                    PosY = info.PositionY;
-                }
+                    var info = _memoryReader.GetPlayerInfo();
+                    if (info != null)
+                    {
+                        HP = info.HP;
+                        MaxHP = info.MaxHP;
+                        MP = info.MP;
+                        MaxMP = info.MaxMP;
+                        EXP = (int)info.Experience;
+                        MaxEXP = (int)info.MaxExperience;
+                        PosX = info.PositionX;
+                        PosY = info.PositionY;
+                    }
+                });
             }
             catch (Exception ex)
             {

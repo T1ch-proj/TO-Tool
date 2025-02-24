@@ -1,0 +1,8 @@
+<Window x:Class="TOTool.UI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TOTool" Height="450" Width="800">
+    <Grid>
+        <!-- 主視窗內容 -->
+    </Grid>
+</Window> 
