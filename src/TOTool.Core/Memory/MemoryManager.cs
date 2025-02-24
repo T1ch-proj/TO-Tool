@@ -142,9 +142,9 @@ namespace TOTool.Core.Memory
                 throw new InvalidOperationException("Memory manager is not initialized");
 
             var buffer = new byte[length];
-            int bytesRead;
+            IntPtr bytesRead;
             
-            if (!ReadProcessMemory(_processHandle, address, buffer, length, out bytesRead) || bytesRead != length)
+            if (!ReadProcessMemory(_processHandle, address, buffer, length, out bytesRead) || bytesRead.ToInt32() != length)
             {
                 throw new Exception($"Failed to read memory at address {address}");
             }
