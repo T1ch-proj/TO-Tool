@@ -11,6 +11,7 @@ using TOTool.UI.Views;
 using TOTool.Common.Settings;
 using TOTool.Core;
 using TOTool.Common.Interfaces;
+using TOTool.Common.Models;  // 添加 GameState 的引用
 
 namespace TOTool.UI
 {
