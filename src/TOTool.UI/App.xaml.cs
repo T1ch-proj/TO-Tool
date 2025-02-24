@@ -67,6 +67,7 @@ namespace TOTool.UI
                 }
 
                 Logger.LogInfo("正在創建主視窗...");
+                var settings = ConfigManager.LoadConfig<Settings.AppSettings>() ?? new Settings.AppSettings();
                 var mainWindow = new MainWindow
                 {
                     DataContext = _serviceProvider.GetRequiredService<MainViewModel>()

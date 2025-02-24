@@ -16,6 +16,42 @@ namespace TOTool.UI.ViewModels
         private double _expPercentage;
         private string _expText = "0/0";
 
+        public double HPPercentage
+        {
+            get => _hpPercentage;
+            set => SetProperty(ref _hpPercentage, value);
+        }
+
+        public string HPText
+        {
+            get => _hpText;
+            set => SetProperty(ref _hpText, value);
+        }
+
+        public double MPPercentage
+        {
+            get => _mpPercentage;
+            set => SetProperty(ref _mpPercentage, value);
+        }
+
+        public string MPText
+        {
+            get => _mpText;
+            set => SetProperty(ref _mpText, value);
+        }
+
+        public double EXPPercentage
+        {
+            get => _expPercentage;
+            set => SetProperty(ref _expPercentage, value);
+        }
+
+        public string EXPText
+        {
+            get => _expText;
+            set => SetProperty(ref _expText, value);
+        }
+
         public PlayerInfoViewModel(IMemoryReader memoryReader)
         {
             _memoryReader = memoryReader;
@@ -34,7 +70,7 @@ namespace TOTool.UI.ViewModels
             var info = _memoryReader.GetPlayerInfo();
             if (info != null)
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     HPPercentage = info.HP * 100.0 / info.MaxHP;
                     HPText = $"{info.HP}/{info.MaxHP}";
