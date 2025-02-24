@@ -11,7 +11,6 @@ using TOTool.UI.Views;
 using TOTool.Common.Settings;
 using TOTool.Core;
 using TOTool.Common.Interfaces;
-using TOTool.Common.Models;  // 添加 GameState 的引用
 
 namespace TOTool.UI
 {
@@ -48,7 +47,7 @@ namespace TOTool.UI
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("請以管理員權限執行此程式！", "權限錯誤", 
+                System.Windows.MessageBox.Show("請以管理員權限執行此程式！", "權限錯誤", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown();
                 return;
@@ -96,7 +95,7 @@ namespace TOTool.UI
             _notifyIcon.MouseClick += NotifyIcon_MouseClick;
         }
 
-        private void NotifyIcon_MouseClick(object sender, Forms.MouseEventArgs e)
+        private void NotifyIcon_MouseClick(object? sender, Forms.MouseEventArgs e)
         {
             if (e.Button == Forms.MouseButtons.Left)
             {
@@ -104,7 +103,7 @@ namespace TOTool.UI
             }
         }
 
-        private void ShowMainWindow(object sender, EventArgs e)
+        private void ShowMainWindow(object? sender, EventArgs e)
         {
             if (MainWindow != null)
             {
@@ -114,12 +113,12 @@ namespace TOTool.UI
             }
         }
 
-        private new void Exit(object sender, EventArgs e)
+        private new void Exit(object? sender, EventArgs e)
         {
             Shutdown();
         }
 
-        private void OnGameStateChanged(object sender, GameState newState)
+        private void OnGameStateChanged(object? sender, GameState newState)
         {
             if (_notifyIcon?.ContextMenuStrip?.Items.Count > 0)
             {

@@ -5,6 +5,8 @@ using System.Windows.Threading;
 using System.Windows;
 using TOTool.Common.Interfaces;
 using TOTool.Core.Memory;
+using System;
+using Forms = System.Windows.Forms;
 
 namespace TOTool.UI.ViewModels
 {
@@ -41,7 +43,7 @@ namespace TOTool.UI.ViewModels
 
         private void CheckGameStatus()
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 if (_gameStateManager.IsGameRunning)
                 {
@@ -65,7 +67,7 @@ namespace TOTool.UI.ViewModels
 
         private void OnGameStateChanged(object? sender, GameState newState)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 GameStatus = newState switch
                 {
