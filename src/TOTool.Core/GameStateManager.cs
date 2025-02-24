@@ -1,50 +1,56 @@
 using System;
 using System.Timers;
+using TOTool.Common.Interfaces;  // IGameStateManager
+using TOTool.Common.Models;      // GameState
+using TOTool.Core.Utilities;
 
-public class GameStateManager : IGameStateManager
+namespace TOTool.Core
 {
-    private GameState _currentState;
-    private readonly Timer _updateTimer;
-
-    public GameState CurrentState => _currentState;
-    public bool IsGameRunning => _currentState == GameState.Running || _currentState == GameState.InGame;
-
-    public event EventHandler<GameState> GameStateChanged;
-
-    public GameStateManager()
+    public class GameStateManager : IGameStateManager
     {
-        _updateTimer = new Timer(1000);
-        _updateTimer.Elapsed += (s, e) => Update();
-    }
+        private GameState _currentState;
+        private readonly Timer _updateTimer;
 
-    public void Initialize()
-    {
-        _updateTimer.Start();
-    }
+        public GameState CurrentState => _currentState;
+        public bool IsGameRunning => _currentState == GameState.Running || _currentState == GameState.InGame;
 
-    public void Update()
-    {
-        var newState = DetermineGameState();
-        if (newState != _currentState)
+        public event EventHandler<GameState> GameStateChanged;
+
+        public GameStateManager()
         {
-            _currentState = newState;
-            GameStateChanged?.Invoke(this, _currentState);
+            _updateTimer = new Timer(1000);
+            _updateTimer.Elapsed += (s, e) => Update();
         }
-    }
 
-    private GameState DetermineGameState()
-    {
-        try
+        public void Initialize()
         {
-            if (!ProcessUtils.IsProcessRunning("Trickster"))
-                return GameState.NotRunning;
-
-            // 實現其他狀態檢查邏輯
-            return GameState.Running;
+            _updateTimer.Start();
         }
-        catch
+
+        public void Update()
         {
-            return GameState.Error;
+            var newState = DetermineGameState();
+            if (newState != _currentState)
+            {
+                _currentState = newState;
+                GameStateChanged?.Invoke(this, _currentState);
+            }
+        }
+
+        private GameState DetermineGameState()
+        {
+            try
+            {
+                if (!ProcessUtils.IsProcessRunning("Trickster"))
+                    return GameState.NotRunning;
+
+                // 實現其他狀態檢查邏輯
+                return GameState.Running;
+            }
+            catch
+            {
+                return GameState.Error;
+            }
         }
     }
 } 
