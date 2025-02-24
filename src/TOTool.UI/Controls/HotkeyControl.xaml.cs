@@ -1,5 +1,5 @@
 using System.Windows.Controls;
-using System.Windows.Input;
+using Input = System.Windows.Input;  // 重命名避免衝突
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -8,8 +8,8 @@ namespace TOTool.UI.Controls
 {
     public partial class HotkeyControl : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
-        private Key _key;
-        private ModifierKeys _modifiers;
+        private Input.Key _key;
+        private Input.ModifierKeys _modifiers;
         private string _label = string.Empty;
 
         public HotkeyControl()
@@ -32,12 +32,12 @@ namespace TOTool.UI.Controls
         {
             get
             {
-                string modifierText = _modifiers != ModifierKeys.None ? $"{_modifiers}+" : "";
+                string modifierText = _modifiers != Input.ModifierKeys.None ? $"{_modifiers}+" : "";
                 return $"{modifierText}{_key}";
             }
         }
 
-        public Key Key
+        public Input.Key Key
         {
             get => _key;
             set
@@ -47,7 +47,7 @@ namespace TOTool.UI.Controls
             }
         }
 
-        public ModifierKeys Modifiers
+        public Input.ModifierKeys Modifiers
         {
             get => _modifiers;
             set
@@ -57,21 +57,21 @@ namespace TOTool.UI.Controls
             }
         }
 
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void TextBox_PreviewKeyDown(object sender, Input.KeyEventArgs e)
         {
             e.Handled = true;
             
-            if (e.Key == Key.Escape)
+            if (e.Key == Input.Key.Escape)
                 return;
 
             Key = e.Key;
-            Modifiers = Keyboard.Modifiers;
+            Modifiers = Input.Keyboard.Modifiers;
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            Key = Key.None;
-            Modifiers = ModifierKeys.None;
+            Key = Input.Key.None;
+            Modifiers = Input.ModifierKeys.None;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
