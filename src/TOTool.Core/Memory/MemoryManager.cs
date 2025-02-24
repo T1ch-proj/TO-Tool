@@ -18,11 +18,11 @@ namespace TOTool.Core.Memory
 
         public bool IsInitialized { get; private set; }
 
-        public bool Initialize(string processName = "Trickster")
+        public bool Initialize()
         {
             try
             {
-                _gameProcess = Process.GetProcessesByName(processName).FirstOrDefault();
+                _gameProcess = Process.GetProcessesByName("Trickster").FirstOrDefault();
                 if (_gameProcess == null) return false;
 
                 _processHandle = OpenProcess(0x1F0FFF, false, _gameProcess.Id);
@@ -66,6 +66,41 @@ namespace TOTool.Core.Memory
         {
             // 實現獲取玩家基址的邏輯
             return IntPtr.Zero;
+        }
+
+        public T ReadMemory<T>(IntPtr address) where T : struct
+        {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Memory manager not initialized");
+
+            int size = Marshal.SizeOf<T>();
+            byte[] buffer = new byte[size];
+            IntPtr bytesRead;
+
+            if (!ReadProcessMemory(_processHandle, address, buffer, size, out bytesRead))
+                throw new Exception($"Failed to read memory at {address}");
+
+            GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            T result = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+            handle.Free();
+
+            return result;
+        }
+
+        public bool WriteMemory<T>(IntPtr address, T value) where T : struct
+        {
+            if (!IsInitialized)
+                return false;
+
+            int size = Marshal.SizeOf<T>();
+            byte[] buffer = new byte[size];
+            IntPtr bytesWritten;
+
+            GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), false);
+            handle.Free();
+
+            return WriteProcessMemory(_processHandle, address, buffer, size, out bytesWritten);
         }
     }
 } 

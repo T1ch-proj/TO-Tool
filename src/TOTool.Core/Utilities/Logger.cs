@@ -21,10 +21,10 @@ namespace TOTool.Core.Utilities
             WriteLog("INFO", message);
         }
 
-        public static void LogError(string message, Exception ex = null)
+        public static void LogError(string message, Exception? ex = null)
         {
             WriteLog("ERROR", message);
-            if (ex != null)
+            if (ex is not null)
             {
                 WriteLog("ERROR", ex.ToString());
             }

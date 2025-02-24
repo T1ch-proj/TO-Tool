@@ -1,5 +1,5 @@
 using System;
-using System.Timers;
+using Timer = System.Timers.Timer;
 using TOTool.Common.Interfaces;  // IGameStateManager
 using TOTool.Common.Models;      // GameState
 using TOTool.Core.Utilities;
