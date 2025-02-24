@@ -2,6 +2,7 @@ using System.Windows.Input;
 using TOTool.Core.Memory;
 using TOTool.Core.Utilities;
 using System.Windows.Threading;
+using System.Windows;
 
 namespace TOTool.UI.ViewModels
 {

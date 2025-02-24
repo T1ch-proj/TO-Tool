@@ -3,7 +3,7 @@ using System.Windows;
 using TOTool.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using TOTool.Core.Memory;
-using TOTool.Core.Game;
+using Microsoft.Extensions.Logging;
 using TOTool.UI.ViewModels;
 using TOTool.Common.Settings;
 
