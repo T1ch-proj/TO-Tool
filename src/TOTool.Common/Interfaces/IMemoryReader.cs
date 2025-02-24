@@ -10,6 +10,6 @@ namespace TOTool.Common.Interfaces
         T Read<T>(IntPtr address) where T : struct;
         byte[] ReadBytes(IntPtr address, int length);
         bool WriteMemory<T>(IntPtr address, T value) where T : struct;
-        PlayerInfo GetPlayerInfo();
+        PlayerInfo? GetPlayerInfo();
     }
 } 
